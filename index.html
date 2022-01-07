@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles/reset.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
+    <link rel=icon href=favicon.ico>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+    <title>Etch-a-sketch</title>
+</head>
+
+<body>
+    <div class="o-wrapper">
+        <div class="main-container">
+            <div class="eas__options">
+                <form class="eas__resize">
+                    <div>
+                        <label for="eas__label-px">
+                            Number of Rows:
+                        </label>
+                        <input type="range" id="numRow" min="10" max="100" autocomplete="off" class="slider"
+                            id="gridRange" />
+                    </div>
+                    <div>
+                        <label for="eas__label-px">
+                            Number of Cols:
+                        </label>
+                        <input type="range" id="numCol" min="10" max="100" autocomplete="off" class="slider"
+                            id="gridRange" />
+                    </div>
+                </form>
+                <div class="eas__colors">
+                    <button>
+                        Default
+                    </button>
+                    <button>
+                        Noir
+                    </button>
+                    <button>
+                        Life
+                    </button>
+                    <button>
+                        Inverted
+                    </button>
+                </div>
+                <div class="eas__erase-wrapper">
+                    <button>Erase</button>
+                </div>
+            </div>
+            <div class="eas">
+                <div class="eas__grid-container"></div>
+            </div>
+            <div class="eas__txt-wrapper">
+                <h1 class="eas__txt">E-A-S</h1>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="index.js"></script>
+
+</html>
