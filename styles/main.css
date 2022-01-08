@@ -1,7 +1,7 @@
 /*** GLOBAL VARIABLES ***/
 :root {
     --color-seance: #692591;
-    --color-purple-heart: #812fb1;
+    --color-purple-heart: #8943b3;
 }
 
 /*** GLOBAL SELECTORS***/
@@ -82,10 +82,11 @@ body {
     font-size: 1.2rem;
 }
 
-.eas__colors > button:hover, .eas__erase-wrapper button:hover {
+.eas__colors > button:hover, .eas__erase-wrapper button:hover, .eas__colors--active{
     color: #fff;
     background: var(--color-purple-heart);
 }
+
 .eas__erase-wrapper button{
     border: none;
 }
@@ -104,17 +105,26 @@ body {
 
 .eas__txt {
     text-align: center;
-    padding: 1.2em;
+    padding: 1em;
     color: #fff;
-    font-size: 3em;
+    font-size: clamp(2em, 3.2vw, 3.5em);
 }
 
 .grid-row-container {
     width: 100%;
     display: grid;
+    grid-gap: 5px;
     grid-template-columns: repeat(16, 1fr);
+    background-color: inherit;
 }
 
 .grid-row-container>* {
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.30);
+    background-color: inherit;
 }
+
+.grid {
+    transition: opacity 1s;
+}
+
+/*** BREAKPOINTS ***/
