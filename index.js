@@ -2,8 +2,8 @@
 
 //instances of DOM elements
 const gridContainerEl = document.querySelector('.eas__grid-container');
-const numRowRange = document.getElementById('numRow');
-const numColRange = document.getElementById('numCol');
+const numOfGridsRange = document.getElementById('grid-range');
+const gridBorderRadiusRange = document.getElementById('grid-border-radius');
 const clrBtnContainer = document.querySelector('.eas__colors');
 
 //intances of DOM buttons
@@ -15,17 +15,18 @@ const clrRGBBtn = document.getElementById('clr-rgb');
 const eraseBtn = document.getElementById('clr-erase');
 
 //global variables
-const MAX_ROWS = 100;
-const MAX_COLS = 100;
+const MAX_ROWS = 64;
+const MAX_COLS = 64;
 const COLOR_IDS = ['clr-black', 'clr-grays', 'clr-rainbow', 'clr-rgb'];
 
-//colors
+//mutable variables
 let numRows = 16;
 let numCols = 16;
+let gridBR = 5;
 let currentColors = 'clr-black';
 
 function generateGrids() {
-    //row grids
+    const gridContainerEl = document.querySelector('.eas__grid-container');
     for (let i = 0; i < numRows; i++) {
         const gridRowContainerEl = document.createElement('div');
         gridRowContainerEl.classList.add('grid-row-container');
@@ -76,10 +77,10 @@ function colorizeWithRainbow(el) {
 function colorizeWithRedGreenOrBlue(el) {
     const unshuffled = [255, 0, 0];
     const shuffled = unshuffled
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value)
-      el.style.backgroundColor = `rgb(${shuffled[0]},${shuffled[1]},${shuffled[2]})`;
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+    el.style.backgroundColor = `rgb(${shuffled[0]},${shuffled[1]},${shuffled[2]})`;
 }
 
 function randomMinMax(min, max) {
@@ -99,25 +100,59 @@ function removeActiveColorWithId(activeColor) {
     })
 }
 
+function changeGridBorderRadius(value) {
+    const grids = document.querySelectorAll('.grid');
+    grids.forEach(el => el.style.borderRadius = value + 'px');
+}
 //Change the number of row grids and ovewrite the grids with new ones
-function changeNumOfGrids() {
+function overwriteGrids() {
     removeGrids();
     generateGrids();
+    updateGridDimensions();
     fillGrid();
 }
 
-//fetch the current value of row range and update the default value of input range
-numRowRange.addEventListener('change', (e) => {
-    const newRows = parseInt(e.target.value);
-    numRows = newRows;
-    changeNumOfGrids();
+function getDimensionGap() {
+    const easEl = document.querySelector('.eas__grid-container');
+    if (easEl.scrollWidth > easEl.scrollHeight) {
+        return easEl.clientWidth / easEl.clientHeight;
+    } else {
+        return easEl.clientHeight / easEl.clientWidth;
+    }
+}
+
+function updateGridDimensions() {
+    const gridContainerEl = document.querySelector('.eas__grid-container');
+    const gridRowContainers = document.querySelectorAll('.grid-row-container');
+    gridContainerEl.style.gridTemplateRows = `repeat(${Math.ceil(numRows)},1fr`;
+    gridRowContainers.forEach(el => el.style.gridTemplateColumns = `repeat(${Math.ceil(numCols)},1fr`);
+}
+
+function updateNumOfGrids(value) {
+    const gridContainerEl = document.querySelector('.eas__grid-container');
+    const newNumOfGrids = parseInt(value);
+    if (gridContainerEl.clientHeight > gridContainerEl.clientWidth) {
+        numCols = newNumOfGrids;
+        numRows = newNumOfGrids * getDimensionGap();
+    } else if (gridContainerEl.clientHeight < gridContainerEl.clientWidth) {
+        numCols = newNumOfGrids * getDimensionGap();
+        numRows = newNumOfGrids;
+    } else {
+        numCols = newNumOfGrids;
+        numRows = newNumOfGrids;
+    }
+}
+
+//fetch the current num of grids and update the default value of input range
+numOfGridsRange.addEventListener('change', (e) => {
+    updateNumOfGrids(e.target.value);
+    overwriteGrids();
+
 })
 
-//fetch the current value of column range and update the default value of input range
-numColRange.addEventListener('change', (e) => {
-    const newCols = parseInt(e.target.value);
-    numCols = newCols;
-    changeNumOfGrids();
+gridBorderRadiusRange.addEventListener('change', (e) => {
+    const gridBorderRadius = parseInt(e.target.value);
+    changeGridBorderRadius(gridBorderRadius);
 })
 
 //Update active buttons once a button is clicked
@@ -133,13 +168,19 @@ for (let c = 0; c < COLOR_IDS.length; c++) {
 eraseBtn.addEventListener('click', eraseFilledGrids);
 
 function initializeEtchASketch() {
-    generateGrids();
-    fillGrid();
-    numRowRange.value = numRows;
-    numColRange.value = numCols;
+    updateNumOfGrids(numOfGridsRange.value);
+    overwriteGrids()
+    numOfGridsRange.value = numRows > numCols ? numCols : numRows;
+    changeGridBorderRadius(gridBR);
     const currentColorFiller = document.getElementById('clr-black');
     currentColorFiller.classList.add('eas__colors--active');
 }
+
+//Change grid sizes and numbers after resizing client screen
+window.onresize = () => {
+    updateNumOfGrids(numOfGridsRange.value);
+    overwriteGrids();
+};
 
 //Initialized function after the webpage loaded
 initializeEtchASketch();
