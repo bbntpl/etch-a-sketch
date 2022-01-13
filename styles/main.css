@@ -51,7 +51,7 @@ body {
 /*** ETCH-A-SKETCH OPTIONS ***/
 .eas__options {
     display: flex;
-    padding: 2em 0;
+    padding: 1.6rem 0;
     gap: 10px;
     color: #fff;
 }
@@ -76,7 +76,10 @@ body {
 .eas__colors>button {
     flex: 1 1 45%;
     border: none;
-    font-size: 1.2rem;
+}
+
+.eas__label-px, .eas__colors>button{
+    font-size: clamp(1rem, 1vw, 2rem);
 }
 
 .eas__colors>button:hover, .eas__erase-wrapper button:hover, .eas__colors--active {
@@ -110,9 +113,9 @@ body {
 
 .eas__txt {
     text-align: center;
-    padding: 1em;
+    padding: 1rem;
     color: #fff;
-    font-size: clamp(1.4em, 3.8vw, 2.7em);
+    font-size: clamp(1.4rem, 3.8vw, 2.7rem);
 }
 
 .grid-row-container {
@@ -129,29 +132,26 @@ body {
     transition: background-color .24s;
 }
 
-
-/*** BREAKPOINTS ***/
-@media screen and (min-device-width: 768px), screen and (min-width: 768px){
+@media screen and (min-width: 768px) and (orientation: landscape) {
     .eas__erase-wrapper {
         display: flex;
         justify-content: end;
     }
 }
 
-@media screen and (min-device-width: 640px) and (max-device-width: 768px), only screen and (min-width: 640px) and (max-width: 768px) {
-    .main-container {
-        height: 100%;
-        max-height: 100%;
-        border-radius: 0;
-        padding: 0 1.2rem;
-    }
-
-    .eas__options {
-        flex-direction: column;
+/*** BREAKPOINTS ***/
+@media screen and (min-width: 768px) {
+    .eas__erase-wrapper {
+        display: flex;
+        justify-content: end;
     }
 }
 
-@media screen and (max-device-width: 968px) and (max-device-width: 428px) and (orientation: landscape) {
+@media screen and (max-width: 760px) and (max-height: 428px) and (orientation: landscape) {
+    .main-container {
+        border-radius: 0;
+    }
+
     .eas__resize {
         display: flex;
         flex-direction: row;
@@ -170,17 +170,32 @@ body {
     }
 }
 
-@media screen and (max-device-width: 640px), only screen and (max-width: 640px) {
+@media screen and (min-width: 640px) and (max-width: 768px) {
     .main-container {
         height: 100%;
         max-height: 100%;
         border-radius: 0;
         padding: 0 1.2rem;
     }
+
+    .eas__options {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .main-container {
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        padding: 0 1.2rem;
+    }
+
     .eas__options {
         flex-direction: column;
         gap: 10px;
     }
+
     .eas__colors {
         flex-direction: row;
         flex-wrap: nowrap;
